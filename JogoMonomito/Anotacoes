@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace JogoMonomito
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            //Criar um sistema que faça um pedra-papel-tesoura, máquina vs jogador
+            //Pessoas com menos de 13 anos não podem jogar(PEDIDO DA PROFESSORA)
+            //Pedir nome do jogador(PEDIDO DA PROFESSORA)
+            //Baseado no GDD do Monomito. penso em usar códigos para definir um valor de comparação
+            //Entre jogadas de máquina e jogador.Ex:
+            
+            //Jogada = ReadLine() (!jogador!)
+            //Máquina pick = new Random().Next(0, 2); 
+            //Pedra = 1, Papel = 1, Tesoura = 1
+            //if tesoura vs papel, tesoura = 2 && if tesoura > papel, então  tesoura ganha
+            //Fazer isso para pedra,papel e tesoura
+            //A partir disso mudar variaveis como vida e dano
+            //EX: jogador = 100 de vida, máquina = 100 de vida
+            //Pedra ganha de tesoura(jogador), então máquina - 30 de vida
+            
+            //Escrever introdução do jogo, explicando as regras e como jogar, talvez um pouco
+            //De história do jogo, e depois começar a batalha.
+            //Coisas como descrever um pouco do mundo e protagonista, alem disso descrições de 
+            //Evolução do personagem, e talvez uma história de fundo para o antagonista e inimigos comuns.
+
+        }
+    }
+}
