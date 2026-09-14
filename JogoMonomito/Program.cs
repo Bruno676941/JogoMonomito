@@ -62,6 +62,55 @@ namespace JogoMonomito
             double vidaMaquina = 10;
             double danoBase = 2;
             int classeEscolhida = 0;
+            int vitoriasTotais = 0;
+            int nivel = 1;
+            double vidaMaximaJogador = vidaJogador;
+            // Guarda o limite máximo inicial (8, 9, 10 ou 13)
+
+            while (vidaJogador > 0)
+            {
+                Console.Clear();
+                Console.WriteLine($"--- NOVA BATALHA DETECTADA (NÍVEL {nivel}) ---");
+                Console.WriteLine($"Herói: {jogador} | Vida: {vidaJogador}/{vidaMaximaJogador}");
+                Console.ReadKey();
+
+                while (vidaJogador > 0 && vidaMaquina > 0)
+                {
+                    // ... (Toda a sua lógica atual de escolher jogada, comparar e aplicar dano)
+                }
+
+                if (vidaJogador <= 0)
+                {Console.WriteLine(" VOCÊ foi derrotado, O mal irá sucumbir o mundo perante a sua derrotado");
+                    Console.ReadKey();
+                    return;
+                    
+                  
+                }
+                else
+                {
+                    // O jogador venceu esta batalha!
+                    vitoriasTotais++;
+
+                    // Sistema de Nível do seu GDD
+                    if (vitoriasTotais == 1 && nivel == 1)
+                    {
+                        nivel = 2;
+                        vidaMaximaJogador += 1.0; // Ganha +1 PV Máximo do GDD
+                        Console.WriteLine($"\n✨ SUBIU DE NÍVEL! Agora você é Nível {nivel}!");
+                    }
+
+                    // RECOMPENSA DE CONTINUIDADE: 
+                    // Recupera os pontos de vida do jogador para o máximo atual antes da próxima batalha
+                    vidaJogador = vidaMaximaJogador;
+
+                    Console.WriteLine("\nPrepare-se para o próximo servo de Giygas...");
+                    Console.WriteLine("Pressione qualquer tecla para marchar adiante...");
+                    Console.ReadKey();
+                }
+
+                // O código bate na chave de fechamento abaixo e VOLTA para o início do 'while (vidaJogador > 0)'
+                // começando uma nova batalha com a vidaMaquina valendo 10 de novo!
+            }
 
             // Validação da classe escolhida pelo jogador
             // traduzindo essa parte do código: se o jogador não digitar um número válido entre 1 e 4, ele será automaticamente colocado na classe Monomito (opção 4).
@@ -139,7 +188,17 @@ namespace JogoMonomito
             else
             {
                 Console.WriteLine("\nBem-vindo ao jogo, " + jogador + "!");
+                Console.WriteLine("Pressione qualquer tecla para continuar...");
+                Console.ReadKey();
             }
+            Console.Clear();
+            Console.WriteLine("==================================================================");
+            Console.WriteLine($"      BATALHA DETECTADA - {jogador.ToUpper()} (NÍVEL {nivel})      ");
+            Console.WriteLine($"      Histórico de vitórias: {vitoriasTotais} | PV Máximo: {vidaMaximaJogador}");
+            Console.WriteLine("==================================================================");
+            Console.WriteLine("Um servo enviado por GIYGAS surge das sombras! Prepare-se!");
+            Console.WriteLine("Pressione qualquer tecla para puxar suas armas...");
+            Console.ReadKey();
             //inicio do jogo(Decisão do jogador e da máquina)
             {
                 //tem que colocar o gerador de numero aleatório fora do while, senão ele vai gerar um número não aleatório a cada rodada por causa da velocidade do while.
@@ -165,13 +224,12 @@ namespace JogoMonomito
                         string jogadaDoJogador = opcoes[escolhaJogador];
                         Console.WriteLine("Você escolheu: " + jogadaDoJogador);
                         Console.WriteLine("A máquina escolheu: " + jogadaDaMaquina);
-                        //Comparação das jogadas
-                        //Comparação das jogadas
+                        //Comparação das jogadas caso de empate
                         if (jogadaDoJogador == jogadaDaMaquina)
                         {
                             Console.WriteLine("Empate!");
                         }
-                        // Bloco ÚNICO de vitória do Jogador baseado no seu GDD
+                        // Comparação das jogadas do jogador e da máquina para determinar o vencedor da rodada
                         else if ((jogadaDoJogador == "Ataque pesado" && jogadaDaMaquina == "Ataque ágil") ||
                                  (jogadaDoJogador == "Postura de contra-ataque" && jogadaDaMaquina == "Ataque pesado") ||
                                  (jogadaDoJogador == "Ataque ágil" && jogadaDaMaquina == "Postura de contra-ataque"))
