@@ -55,11 +55,72 @@ namespace JogoMonomito
             Console.WriteLine("3 - Monge   (Soqueiras)      |  8 PV | 1.5x Dano Contra-Ataque, 0.8x os outros");
             Console.WriteLine("4 - Monomito(Espada Improvisada)| 13 PV | Dano padrão, Força de vontade extrema");
             Console.Write("\nDigite o número da sua classe: ");
+            //tutorial, essa linha é só para dividir o código em partes menores e mais fáceis de entender, não é necessário para o funcionamento do jogo.
 
-            string[] opcoes = { "Pedra", "Papel", "Tesoura" };
-            Console.WriteLine("Digite seu nome: ");
+            int vidaJogador = 3;
+            int vidaMaquina = 3;
+            int classeEscolhida = 0;
+
+            // Validação da classe escolhida pelo jogador
+            // traduzindo essa parte do código: se o jogador não digitar um número válido entre 1 e 4, ele será automaticamente colocado na classe Monomito (opção 4).
+            // int.TryParse: Tenta converter o texto que o Console.ReadLine() pegou em um número inteiro.
+            //out int classeEscolhida: O out serve para criar a variável e passar o resultado para fora. EX: Se o jogador digitar
+            //"1", o TryParse consegue converter e o out joga o número 1 dentro da variável classeEscolhida.
+            if (!int.TryParse(Console.ReadLine(), out classeEscolhida) || classeEscolhida < 1 || classeEscolhida > 4)
+            {
+                Console.WriteLine("\nComo o mundo originalmente havia proposto, você será Monomito.");
+                classeEscolhida = 4;
+                Console.ReadKey();
+            }
+            // Atribuição de vida inicial com base na classe escolhida
+                if (classeEscolhida == 1)
+                {
+                    Console.WriteLine("\nVocê escolheu a classe Bárbaro, com 10 pontos de vida.");
+                    vidaJogador = 10;
+                }
+                else if (classeEscolhida == 2)
+                {
+                    Console.WriteLine("\nVocê escolheu a classe Ladino, com 9 pontos de vida.");
+                    vidaJogador = 9;
+                }
+                else if (classeEscolhida == 3)
+                {
+                    Console.WriteLine("\nVocê escolheu a classe Monge, com 8 pontos de vida.");
+                    vidaJogador = 8;
+                }
+                else
+                {
+                    Console.WriteLine("\nVocê escolheu a classe Monomito, com 13 pontos de vida.");
+                    vidaJogador = 13;
+                }
+            Console.WriteLine("\nPressione qualquer tecla para ir para o tutorial...");
+            Console.ReadKey();
+
+            Console.Clear();
+            Console.WriteLine("==================================================================");
+            Console.WriteLine("                    TUTORIAL DE COMBATE                           ");
+            Console.WriteLine("==================================================================");
+            Console.WriteLine("Entenda como funcionam os embates neste mundo (Regras do Jogo):\n");
+
+            Console.WriteLine("1. Ataque pesado VENCE Ataque ágil");
+            Console.WriteLine("   -> Por quê? O ataque pesado possui força o suficiente para");
+            Console.WriteLine("      parar ataques fracos e rápidos.\n");
+
+            Console.WriteLine("2. Ataque ágil VENCE Postura de contra-ataque");
+            Console.WriteLine("   -> Por quê? Algo ágil que não foi parado com força é");
+            Console.WriteLine("      praticamente indefensável.\n");
+
+            Console.WriteLine("3. Postura de contra-ataque VENCE Ataque pesado");
+            Console.WriteLine("   -> Por quê? A calma do contra-ataque consegue ganhar");
+            Console.WriteLine("      de um ataque lento e pesado.");
+            Console.WriteLine("==================================================================");
+            Console.WriteLine("Pressione qualquer tecla para continuar...");
+            Console.ReadKey();
+
+            string[] opcoes = { "Ataque pesado", "Postura de contra-ataque", "Ataque ágil" };
+            Console.WriteLine("\nDigite seu nome: ");
             string jogador = Console.ReadLine();
-            Console.WriteLine("Digite sua idade: ");
+            Console.WriteLine("\nDigite sua idade: ");
             int idade;
             while (!int.TryParse(Console.ReadLine(), out idade))
             {
@@ -68,17 +129,15 @@ namespace JogoMonomito
 
             if (idade < 13)
             {
-                Console.WriteLine("Você não pode jogar, pois é menor de 13 anos.");
+                Console.WriteLine("Você não pode jogar, pois menores de 13 anos não conseguiram arcar com as consequências.");
                 return;
             }
             else
             {
-                Console.WriteLine("Bem-vindo ao jogo, " + jogador + "!");
+                Console.WriteLine("\nBem-vindo ao jogo, " + jogador + "!");
             }
             //inicio do jogo(Decisão do jogador e da máquina)
             {
-                int vidaJogador = 3;
-                int vidaMaquina = 3;
                 while (vidaJogador > 0 && vidaMaquina > 0)
                 {
                     //Escolha da máquina
@@ -111,10 +170,10 @@ namespace JogoMonomito
                         {
                             //calculo e visor da vida(jogador e máquina)
                             vidaMaquina--;
-                        
-                            
-                                Console.WriteLine("Você ganhou a rodada! " + " O inimigo tem " + vidaMaquina + " de vida.");
-                            
+
+
+                            Console.WriteLine("Você ganhou a rodada! " + " O inimigo tem " + vidaMaquina + " de vida.");
+
                         }
                         else
                         {
@@ -125,8 +184,8 @@ namespace JogoMonomito
 
                         }
                     }
-                  
-               
+
+
                 }
                 //Verificação de vitória e derrota
                 if (vidaJogador == 0)
@@ -138,7 +197,9 @@ namespace JogoMonomito
                 {
                     Console.WriteLine(jogador + " venceu, a proxima batlha te aguarda!");
                 }
+
             }
+        
         }
     }
 }  
