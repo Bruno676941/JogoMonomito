@@ -66,6 +66,8 @@ namespace JogoMonomito
             // int.TryParse: Tenta converter o texto que o Console.ReadLine() pegou em um número inteiro.
             //out int classeEscolhida: O out serve para criar a variável e passar o resultado para fora. EX: Se o jogador digitar
             //"1", o TryParse consegue converter e o out joga o número 1 dentro da variável classeEscolhida.
+            //tive que mudar a variável classeEscolhida, antes ela não tava definida, e mudou a parte do out int
+            // mas fica aí de aprendizado, o out é usado para passar o valor de uma variável para fora do método e o !int é tipo um inversor de true e false
             if (!int.TryParse(Console.ReadLine(), out classeEscolhida) || classeEscolhida < 1 || classeEscolhida > 4)
             {
                 Console.WriteLine("\nComo o mundo originalmente havia proposto, você será Monomito.");
@@ -138,21 +140,23 @@ namespace JogoMonomito
             }
             //inicio do jogo(Decisão do jogador e da máquina)
             {
+                //tem que colocar o gerador de numero aleatório fora do while, senão ele vai gerar um número não aleatório a cada rodada por causa da velocidade do while.
+                Random jogadaMaquina = new Random();
                 while (vidaJogador > 0 && vidaMaquina > 0)
                 {
                     //Escolha da máquina
-                    Random jogadaMaquina = new Random();
+                  
                     int indiceMaquina = jogadaMaquina.Next(0, opcoes.Length);
                     string jogadaDaMaquina = opcoes[indiceMaquina];
                     //Escolha do jogador
-                    Console.WriteLine("Escolha sua jogada:");
-                    Console.WriteLine("0 - Pedra");
-                    Console.WriteLine("1 - Papel");
-                    Console.WriteLine("2 - Tesoura");
+                    Console.WriteLine("\nEscolha sua jogada:");
+                    Console.WriteLine("0 - Ataque pesado");
+                    Console.WriteLine("1 - Postura de contra-ataque");
+                    Console.WriteLine("2 - Ataque ágil");
                     int escolhaJogador = int.Parse(Console.ReadLine());
                     if (escolhaJogador < 0 || escolhaJogador > 2)
                     {
-                        Console.WriteLine("Escolha inválida. Tente novamente.");
+                        Console.WriteLine("\nEscolha inválida. Tente novamente.");
                     }
                     else
                     {
@@ -164,9 +168,9 @@ namespace JogoMonomito
                         {
                             Console.WriteLine("Empate!");
                         }
-                        else if ((jogadaDoJogador == "Pedra" && jogadaDaMaquina == "Tesoura") ||
-                                 (jogadaDoJogador == "Papel" && jogadaDaMaquina == "Pedra") ||
-                                 (jogadaDoJogador == "Tesoura" && jogadaDaMaquina == "Papel"))
+                        else if ((jogadaDoJogador == "Ataque pesado" && jogadaDaMaquina == "Tesoura") ||
+                                 (jogadaDoJogador == "Postura de contra-ataque" && jogadaDaMaquina == "Ataque pesado") ||
+                                 (jogadaDoJogador == "Ataque ágil" && jogadaDaMaquina == "Postura de contra-ataque"))
                         {
                             //calculo e visor da vida(jogador e máquina)
                             vidaMaquina--;
