@@ -55,10 +55,12 @@ namespace JogoMonomito
             Console.WriteLine("3 - Monge   (Soqueiras)      |  8 PV | 1.5x Dano Contra-Ataque, 0.8x os outros");
             Console.WriteLine("4 - Monomito(Espada Improvisada)| 13 PV | Dano padrão, Força de vontade extrema");
             Console.Write("\nDigite o número da sua classe: ");
+            //Descobri para que o \n serve, ele serve para pular uma linha no console, então quando você usa o \n, o texto que vem depois dele vai aparecer na linha de baixo.
             //tutorial, essa linha é só para dividir o código em partes menores e mais fáceis de entender, não é necessário para o funcionamento do jogo.
 
-            int vidaJogador = 3;
-            int vidaMaquina = 3;
+            double vidaJogador = 3;
+            double vidaMaquina = 10;
+            double danoBase = 2;
             int classeEscolhida = 0;
 
             // Validação da classe escolhida pelo jogador
@@ -88,7 +90,7 @@ namespace JogoMonomito
                 else if (classeEscolhida == 3)
                 {
                     Console.WriteLine("\nVocê escolheu a classe Monge, com 8 pontos de vida.");
-                    vidaJogador = 8;
+                vidaJogador = 8;
                 }
                 else
                 {
@@ -164,28 +166,50 @@ namespace JogoMonomito
                         Console.WriteLine("Você escolheu: " + jogadaDoJogador);
                         Console.WriteLine("A máquina escolheu: " + jogadaDaMaquina);
                         //Comparação das jogadas
+                        //Comparação das jogadas
                         if (jogadaDoJogador == jogadaDaMaquina)
                         {
                             Console.WriteLine("Empate!");
                         }
-                        else if ((jogadaDoJogador == "Ataque pesado" && jogadaDaMaquina == "Tesoura") ||
+                        // Bloco ÚNICO de vitória do Jogador baseado no seu GDD
+                        else if ((jogadaDoJogador == "Ataque pesado" && jogadaDaMaquina == "Ataque ágil") ||
                                  (jogadaDoJogador == "Postura de contra-ataque" && jogadaDaMaquina == "Ataque pesado") ||
                                  (jogadaDoJogador == "Ataque ágil" && jogadaDaMaquina == "Postura de contra-ataque"))
                         {
-                            //calculo e visor da vida(jogador e máquina)
-                            vidaMaquina--;
+                        
+                            double danoFinal = danoBase;
 
+                            // APLICANDO A PASSIVA DO BÁRBARO (Classe 1)
+                            if (classeEscolhida == 1)
+                            {
+                                if (escolhaJogador == 0) { danoFinal = danoBase * 1.5; }
+                                else { danoFinal = danoBase * 0.8; }
+                            }
+                            // APLICANDO A PASSIVA DO LADINO (Classe 2)
+                            else if (classeEscolhida == 2)
+                            {
+                                if (escolhaJogador == 2) { danoFinal = danoBase * 1.5; }
+                                else { danoFinal = danoBase * 0.8; }
+                            }
+                            // APLICANDO A PASSIVA DO MONGE (Classe 3)
+                            else if (classeEscolhida == 3)
+                            {
+                                if (escolhaJogador == 1) { danoFinal = danoBase * 1.5; }
+                                else { danoFinal = danoBase * 0.8; }
+                            }
+                            // O Monomito (Classe 4) não altera o danoBase (continua 2.0)
 
-                            Console.WriteLine("Você ganhou a rodada! " + " O inimigo tem " + vidaMaquina + " de vida.");
-
+                            // Aplicamos o dano calculado na máquina
+                            vidaMaquina = vidaMaquina - danoFinal;
+                            //lembrei que dava para usar $ para interpolar variáveis dentro de strings, então usei ele para mostrar o dano final e a vida da máquina. (autovomplete ajuda muito nisso)
+                            Console.WriteLine($"\nVocê ganhou a rodada! Causou {danoFinal:F1} de dano. O inimigo tem {vidaMaquina:F1} de vida.");
                         }
                         else
                         {
-                            vidaJogador--;
-                            Console.WriteLine("A máquina ganhou a rodada! " + " você tem " + vidaJogador + " de vida.");
-
-
-
+                            // Se não empatou e o jogador não ganhou, a máquina ganhou a rodada
+                            double danoInimigo = 2.0;
+                            vidaJogador = vidaJogador - danoInimigo;
+                            Console.WriteLine($"\nA máquina ganhou a rodada! Você perdeu {danoInimigo} de vida, restam {vidaJogador:F1} de PV.");
                         }
                     }
 
