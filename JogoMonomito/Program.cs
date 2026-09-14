@@ -32,6 +32,29 @@ namespace JogoMonomito
         static void Main(string[] args)
         {
 
+            // introdução do jogo
+            Console.Clear();
+            Console.WriteLine("==================================================================");
+            Console.WriteLine("                BEM-VINDO AO MUNDO DE MONOMITO                    ");
+            Console.WriteLine("==================================================================");
+            Console.WriteLine("Um mundo movido por histórias. Mitos, fábulas e cantigas...");
+            Console.WriteLine("Subitamente, histórias de heróis ganham vida. Diante da ameaça de");
+            Console.WriteLine("GIYGAS, a maldade encarnada, resta a você seguir de se tonar um heroi!");
+            Console.WriteLine("e enfrentar o mal que assola o mundo.");
+            Console.WriteLine("==================================================================\n");
+            Console.WriteLine("Pressione QUALQUER TECLA para ir para a seleção de sua classe...");
+            Console.ReadKey();
+
+            // Seleção de classe do jogador
+            Console.Clear();
+            Console.WriteLine("==================================================================");
+            Console.WriteLine("                      ESCOLHA SUA CLASSE                          ");
+            Console.WriteLine("==================================================================");
+            Console.WriteLine("1 - Bárbaro (Machado Grande) | 10 PV | 1.5x Dano Pesado, 0.8x os outros");
+            Console.WriteLine("2 - Ladino  (Punhal)         |  9 PV | 1.5x Dano Ágil, 0.8x os outros");
+            Console.WriteLine("3 - Monge   (Soqueiras)      |  8 PV | 1.5x Dano Contra-Ataque, 0.8x os outros");
+            Console.WriteLine("4 - Monomito(Espada Improvisada)| 13 PV | Dano padrão, Força de vontade extrema");
+            Console.Write("\nDigite o número da sua classe: ");
 
             string[] opcoes = { "Pedra", "Papel", "Tesoura" };
             Console.WriteLine("Digite seu nome: ");
