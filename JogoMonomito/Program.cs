@@ -37,16 +37,20 @@ namespace JogoMonomito
             Console.WriteLine("Digite seu nome: ");
             string jogador = Console.ReadLine();
             Console.WriteLine("Digite sua idade: ");
-            int idade = Convert.ToInt32(Console.ReadLine());
+            int idade;
+            while (!int.TryParse(Console.ReadLine(), out idade))
+            {
+                Console.WriteLine("Idade inválida. Por favor, digite um número.");
+            }
 
             if (idade < 13)
             {
                 Console.WriteLine("Você não pode jogar, pois é menor de 13 anos.");
+                return;
             }
             else
             {
                 Console.WriteLine("Bem-vindo ao jogo, " + jogador + "!");
-
             }
             //inicio do jogo(Decisão do jogador e da máquina)
             {
@@ -86,7 +90,7 @@ namespace JogoMonomito
                             vidaMaquina--;
                         
                             
-                                Console.WriteLine("Você ganhou a rodada! " + " ela tem " + vidaMaquina + " de vida.");
+                                Console.WriteLine("Você ganhou a rodada! " + " O inimigo tem " + vidaMaquina + " de vida.");
                             
                         }
                         else
@@ -104,7 +108,8 @@ namespace JogoMonomito
                 //Verificação de vitória e derrota
                 if (vidaJogador == 0)
                 {
-                    Console.WriteLine(" Máquina venceu, reinicie o programa e tente novamente");
+                    Console.WriteLine(" VOCÊ foi derrotado, O mal irá sucumbir o mundo perante a sua derrotado");
+                    return;
                 }
                 else
                 {
