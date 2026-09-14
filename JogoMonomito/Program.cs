@@ -300,3 +300,9 @@ namespace JogoMonomito
 // no final só deixei algumas divisões de código para deixar o código mais organizado e fácil de ler, mas não afeta o funcionamento do jogo.
 // Infelizmente, achei muito dificíl fazer aquelas divisões de texto ========== e pedi para o chat só colocar para mim
 // ainda tive que montar tipo um quebra cabeça no código porque eu tinha começado por uma ordem totalmente aleatória, mas no final deu certo e o jogo funciona bem.(espero eu....)
+//talvez era para eu ter feito algum planejamento antes de começar a escrever o código, mas eu não fiz, então tive que ir ajustando as coisas no meio do caminho. Mas no final deu certo e o jogo funciona bem.(espero eu....)
+//espero eu... é tipo uma referencia à segunda fase do romantismo brasileiro, que é a fase da incerteza, da dúvida, da melancolia e da subjetividade. É uma fase em que o eu lírico se sente perdido, inseguro e angustiado diante do mundo e da vida. É uma fase em que o eu lírico
+//busca respostas para os seus questionamentos existenciais e para os seus conflitos internos. É uma fase em que o eu lírico se volta para si mesmo e para os seus sentimentos, emoções e pensamentos. É uma fase em que o eu lírico se expressa através da poesia, da música e da arte. É uma fase em que o eu lírico se revela
+//como um ser humano complexo, sensível e vulnerável. É uma fase em que o eu lírico se identifica com a natureza, com a sociedade e com a história. É uma fase em que o eu lírico se transforma em um herói trágico, que enfrenta os desafios da vida com coragem, dignidade e esperança. 
+//nem lembrava de tudo isso, mas o auto complete meteu aí e eu não quero tirar
+//bom tinha tanto comentario espalhado que eu acabei colocando tudo aqui para organizar melhor.
