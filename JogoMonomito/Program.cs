@@ -17,7 +17,7 @@ namespace JogoMonomito
             Console.WriteLine("==================================================================");
             Console.WriteLine("Um mundo movido por histórias. Mitos, fábulas e cantigas...");
             Console.WriteLine("Subitamente, histórias de heróis ganham vida. Diante da ameaça de");
-            Console.WriteLine("GIYGAS, a maldade encarnada, resta a você seguir de se tonar um heroi!");
+            Console.WriteLine("GIYGAS, a maldade encarnada, resta a você seguir o caminho de se tornar um herói");
             Console.WriteLine("e enfrentar o mal que assola o mundo.");
             Console.WriteLine("==================================================================\n");
             Console.WriteLine("Pressione QUALQUER TECLA para ir para o Controle de Acesso...");
@@ -97,9 +97,7 @@ namespace JogoMonomito
             double vidaMaximaJogador = vidaJogador;
             double danoBase = 2;
             int vitoriasTotais = 0;
-            int nivel = 1;
-
-            Console.WriteLine("\nPressione qualquer tecla para ir para o tutorial...");
+            int nivel = 1; Console.WriteLine("\nPressione qualquer tecla para ir para o tutorial...");
             Console.ReadKey();
 
             // 4. TUTORIAL DE COMBATE
@@ -120,97 +118,157 @@ namespace JogoMonomito
 
             string[] opcoes = { "Ataque pesado", "Postura de contra-ataque", "Ataque ágil" };
             Random jogadaMaquina = new Random();
+
             // ==================================================================
             // 5. LOOP DA JORNADA (Faz o jogo continuar em sequência mantendo o nível)
             // ==================================================================
             while (vidaJogador > 0)
             {
-                double vidaMaquina = 10; // Reinicia a vida do lacaio a cada nova batalha
+                // Inimigos normais têm 10 PV. No nível 4, surge o Chefe GIYGAS com 16 PV!
+                double vidaMaquina = (nivel >= 4) ? 16 : 10;
+                int contadorRodadas = 0;
+                bool levouDanoNestaRodada = false;
 
                 Console.Clear();
                 Console.WriteLine("==================================================================");
-                Console.WriteLine($"      BATALHA DETECTADA - {jogador.ToUpper()} (NÍVEL {nivel})      ");
+                if (nivel >= 4)
+                {
+                    Console.WriteLine($" CONFRONTO FINAL: {jogador.ToUpper()} VS GIYGAS (A MALDADE ENCARNADA) ");
+                }
+                else
+                {
+                    Console.WriteLine($"      BATALHA DETECTADA - {jogador.ToUpper()} (NÍVEL {nivel})      ");
+                }
                 Console.WriteLine($"      Histórico de vitórias: {vitoriasTotais} | PV Máximo: {vidaMaximaJogador}");
                 Console.WriteLine("==================================================================");
-                Console.WriteLine("Um servo enviado por GIYGAS surge das sombras! Prepare-se!");
+
+                if (nivel >= 4)
+                    Console.WriteLine("A terra treme. Giygas surge para apagar a sua história! É tudo ou nada!");
+                else
+                    Console.WriteLine("Um servo enviado por GIYGAS surge das sombras! Prepare-se!");
+
                 Console.WriteLine("Pressione qualquer tecla para puxar suas armas...");
                 Console.ReadKey();
 
                 // LOOP DO COMBATE ATUAL
                 while (vidaJogador > 0 && vidaMaquina > 0)
                 {
+                    contadorRodadas++;
                     Console.Clear();
                     Console.WriteLine("------------------------------------------------------------------");
-                    Console.WriteLine($"STATUS: {jogador} [{vidaJogador:F1}/{vidaMaximaJogador} PV] VS Inimigo [{vidaMaquina:F1} PV]");
+                    string nomeInimigo = (nivel >= 4) ? "GIYGAS" : "Inimigo";
+                    Console.WriteLine($"STATUS: {jogador} [{vidaJogador:F1}/{vidaMaximaJogador} PV] VS {nomeInimigo} [{vidaMaquina:F1} PV]");
+                    Console.WriteLine($"RODADA: {contadorRodadas}");
                     Console.WriteLine("------------------------------------------------------------------");
-                    // Escolha do jogador
-                    Console.WriteLine("Escolha sua jogada:");
-                    Console.WriteLine("0 - Ataque pesado");
-                    Console.WriteLine("1 - Postura de contra-ataque");
-                    Console.WriteLine("2 - Ataque ágil");
-                    Console.Write("Sua escolha: ");
 
-                    if (!int.TryParse(Console.ReadLine(), out int escolhaJogador) || escolhaJogador < 0 || escolhaJogador > 2)
-                    {
-                        Console.WriteLine("\nEscolha inválida. Você hesitou e a máquina te golpeou!");
-                        vidaJogador -= 2.0;
-                        Console.ReadKey();
-                        continue;
-                    }
-
-                    // Escolha da máquina
+                    // Escolha oculta da máquina
                     int indiceMaquina = jogadaMaquina.Next(0, opcoes.Length);
                     string jogadaDaMaquina = opcoes[indiceMaquina];
 
-                    string jogadaDoJogador = opcoes[escolhaJogador];
-                    Console.Clear();
-                    Console.WriteLine("Você escolheu: " + jogadaDoJogador);
-                    Console.WriteLine("A máquina escolheu: " + jogadaDaMaquina);
-
-                    // Comparação das jogadas caso de empate
-                    if (jogadaDoJogador == jogadaDaMaquina)
+                    // RECOMPENSA NÍVEL 3 - PREPARAÇÃO: Revela pistas a cada 2 rodadas
+                    if (nivel >= 3 && contadorRodadas % 2 == 0)
                     {
-                        Console.WriteLine("\n[EMPATE] As energias se equilibraram! Nenhum dano causado.");
+                        Console.WriteLine(" [PREPARAÇÃO ATIVA] Sua mente tática prevê o movimento do oponente!");
+                        int indicePista = (indiceMaquina + 1) % 3;
+                        Console.WriteLine($"-> Pista: O inimigo certamente NÃO usará: {opcoes[indicePista]}");
+                        Console.WriteLine("------------------------------------------------------------------");
                     }
-                    // Comparação das jogadas para determinar o vencedor da rodada
-                    else if ((jogadaDoJogador == "Ataque pesado" && jogadaDaMaquina == "Ataque ágil") ||
-                             (jogadaDoJogador == "Postura de contra-ataque" && jogadaDaMaquina == "Ataque pesado") ||
-                             (jogadaDoJogador == "Ataque ágil" && jogadaDaMaquina == "Postura de contra-ataque"))
+
+                    // RECOMPENSA NÍVEL 4 - ENCONTRO DE INTENÇÕES: Menu especial de Empate Forçado
+                    bool empatouForçado = false;
+                    if (nivel >= 4 && levouDanoNestaRodada)
                     {
-                        double danoFinal = danoBase;
+                        Console.WriteLine("[ENCONTRO DE INTENÇÕES] Você sofreu dano recentemente e pode manipular o destino!");
+                        Console.WriteLine("Deseja forçar um empate nesta rodada para se proteger?");
+                        Console.WriteLine("S - Sim, invocar o Encontro de Intenções");
+                        Console.WriteLine("N - Não, quero lutar normalmente");
+                        Console.Write("Escolha: ");
+                        string escolhaIntencao = Console.ReadLine().ToUpper();
 
-                        // APLICANDO A PASSIVA DO BÁRBARO (Classe 1)
-                        if (classeEscolhida == 1)
+                        if (escolhaIntencao == "S")
                         {
-                            if (escolhaJogador == 0) { danoFinal = danoBase * 1.5; }
-                            else { danoFinal = danoBase * 0.8; }
+                            empatouForçado = true;
+                            levouDanoNestaRodada = false;
                         }
-                        // APLICANDO A PASSIVA DO LADINO (Classe 2)
-                        else if (classeEscolhida == 2)
-                        {
-                            if (escolhaJogador == 2) { danoFinal = danoBase * 1.5; }
-                            else { danoFinal = danoBase * 0.8; }
-                        }
-                        // APLICANDO A PASSIVA DO MONGE (Classe 3)
-                        else if (classeEscolhida == 3)
-                        {
-                            if (escolhaJogador == 1) { danoFinal = danoBase * 1.5; }
-                            else { danoFinal = danoBase * 0.8; }
-                        }
+                    }
 
-                        // Aplicamos o dano calculado na máquina
-                        vidaMaquina = vidaMaquina - danoFinal;
-                        if (vidaMaquina < 0) vidaMaquina = 0;
+                    int escolhaJogador = 0;
+                    if (!empatouForçado)
+                    {
+                        Console.WriteLine("Escolha sua jogada:");
+                        Console.WriteLine("0 - Ataque pesado");
+                        Console.WriteLine("1 - Postura de contra-ataque");
+                        Console.WriteLine("2 - Ataque ágil");
+                        Console.Write("Sua escolha: ");
 
-                        Console.WriteLine($"\nVocê ganhou a rodada! Causou {danoFinal:F1} de dano. O inimigo tem {vidaMaquina:F1} de vida.");
+                        if (!int.TryParse(Console.ReadLine(), out int escolhaJogadorInformado) || escolhaJogadorInformado < 0 || escolhaJogadorInformado > 2)
+                        {
+                            Console.WriteLine("\nEscolha inválida. Você hesitou e a máquina te golpeou!");
+                            vidaJogador -= 2.0;
+                            levouDanoNestaRodada = true;
+                            Console.ReadKey();
+                            continue;
+                        }
+                        escolhaJogador = escolhaJogadorInformado;
+                    }
+                    Console.Clear();
+                    if (empatouForçado)
+                    {
+                        Console.WriteLine("==================================================================");
+                        Console.WriteLine(" ENCONTRO DE INTENÇÕES EXECUTADO!");
+                        Console.WriteLine("Suas mentes se alinharam no Tabuleiro do Destino e a rodada foi empatada à força!");
+                        Console.WriteLine("==================================================================");
                     }
                     else
                     {
-                        double danoInimigo = 2.0;
-                        vidaJogador = vidaJogador - danoInimigo;
-                        if (vidaJogador < 0) vidaJogador = 0;
+                        string jogadaDoJogador = opcoes[escolhaJogador];
+                        Console.WriteLine("Você escolheu: " + jogadaDoJogador);
+                        Console.WriteLine("A máquina escolheu: " + jogadaDaMaquina);
 
-                        Console.WriteLine($"\nA máquina ganhou a rodada! Você perdeu {danoInimigo} de vida, restam {vidaJogador:F1} de PV.");
+                        // Comparação das jogadas caso de empate normal
+                        if (jogadaDoJogador == jogadaDaMaquina)
+                        {
+                            Console.WriteLine("\n[EMPATE] As energias se equilibraram! Nenhum dano causado.");
+                        }
+                        // Comparação para determinar a vitória da rodada (Fantasia do GDD)
+                        else if ((jogadaDoJogador == "Ataque pesado" && jogadaDaMaquina == "Ataque ágil") ||
+                                 (jogadaDoJogador == "Postura de contra-ataque" && jogadaDaMaquina == "Ataque pesado") ||
+                                 (jogadaDoJogador == "Ataque ágil" && jogadaDaMaquina == "Postura de contra-ataque"))
+                        {
+                            double danoFinal = danoBase;
+
+                            // Aplicando a Habilidade Passiva de cada classe
+                            if (classeEscolhida == 1) // Bárbaro
+                            {
+                                if (escolhaJogador == 0) { danoFinal = danoBase * 1.5; }
+                                else { danoFinal = danoBase * 0.8; }
+                            }
+                            else if (classeEscolhida == 2) // Ladino
+                            {
+                                if (escolhaJogador == 2) { danoFinal = danoBase * 1.5; }
+                                else { danoFinal = danoBase * 0.8; }
+                            }
+                            else if (classeEscolhida == 3) // Monge
+                            {
+                                if (escolhaJogador == 1) { danoFinal = danoBase * 1.5; }
+                                else { danoFinal = danoBase * 0.8; }
+                            }
+
+                            vidaMaquina -= danoFinal;
+                            if (vidaMaquina < 0) vidaMaquina = 0;
+
+                            Console.WriteLine($"\nVocê ganhou a rodada! Causou {danoFinal:F1} de dano. O oponente tem {vidaMaquina:F1} de vida.");
+                        }
+                        else
+                        {
+                            // Vitória da máquina na rodada
+                            double danoInimigo = 2.0;
+                            vidaJogador -= danoInimigo;
+                            if (vidaJogador < 0) vidaJogador = 0;
+                            levouDanoNestaRodada = true; // Ativa a permissão para usar o Nível 4 na próxima rodada
+
+                            Console.WriteLine($"\nA máquina ganhou a rodada! Você perdeu {danoInimigo} de vida, restam {vidaJogador:F1} de PV.");
+                        }
                     }
 
                     Console.WriteLine("\nPressione qualquer tecla para a próxima rodada...");
@@ -222,34 +280,64 @@ namespace JogoMonomito
                 if (vidaJogador <= 0)
                 {
                     Console.WriteLine("==================================================================");
-                    Console.WriteLine(" VOCÊ foi derrotado, O mal irá sucumbir o mundo perante a sua derrota");
+                    Console.WriteLine("   GAME OVER - O MONOMITO FOI QUEBRADO");
+                    Console.WriteLine("==================================================================");
+                    Console.WriteLine("O mal de Giygas irá sucumbir o mundo perante a sua queda.");
+                    Console.WriteLine("Sua jornada termina aqui. Descanse, jovem herói.");
                     Console.WriteLine("==================================================================");
                     Console.ReadKey();
-                    return; // Fecha o programa se perder
+                    return; // Fecha o programa definitivamente
                 }
                 else
                 {
                     vitoriasTotais++;
                     Console.WriteLine("==================================================================");
-                    Console.WriteLine(jogador + " venceu a batalha, o lacaio de Giygas foi purificado!");
-                    Console.WriteLine("==================================================================");
-
-                    // Sistema de Nível do GDD (1 vitória = Nível 2)
-                    if (vitoriasTotais == 1 && nivel == 1)
+                    if (nivel >= 4)
                     {
-                        nivel = 2;
-                        vidaMaximaJogador = vidaMaximaJogador + 1.0; // Ganha +1 PV Máximo do GDD
-                        Console.WriteLine("\n✨ RECOMPENSA DE NÍVEL DESTRANCADA! ✨");
-                        Console.WriteLine("Você subiu para o NÍVEL 2!");
-                        Console.WriteLine($"Monomito ganhou experiência de combate! Seu PV Máximo agora é: {vidaMaximaJogador} PV.");
+                        Console.WriteLine(" O MONOMITO TRIUNFOU! GIYGAS FOI DESTRUÍDO EM DEFINITIVO! ");
+                        Console.WriteLine("==================================================================");
+                        Console.WriteLine($"Parabéns, {jogador}! As histórias reais foram salvas e a paz retornou!");
+                        Console.WriteLine("A Five Migas saúda você pela conclusão da Jornada do Herói!");
+                        Console.WriteLine("Pressione qualquer tecla para encerrar com honras...");
+                        Console.ReadKey();
+                        return; // Vitória máxima do jogo, encerra o programa com sucesso!
+                    }
+                    else
+                    {
+                        Console.WriteLine(jogador + " venceu a batalha, o lacaio de Giygas foi purificado!");
                         Console.WriteLine("==================================================================");
                     }
 
-                    // Cura o jogador para o máximo atual antes da próxima rodada do loop maior
+                    // SISTEMA DE PROGRESSÃO ENTRE PARTIDAS DO GDD
+                    if (vitoriasTotais == 1 && nivel == 1)
+                    {
+                        nivel = 2;
+                        vidaMaximaJogador += 1.0; // Recompensa Nível 2: +1 PV Máximo
+                        Console.WriteLine("\n RECOMPENSA DE NÍVEL DESTRANCADA! ");
+                        Console.WriteLine("Você subiu para o NÍVEL 2!");
+                        Console.WriteLine($"Monomito ganhou experiência de combate! Seu PV Máximo mudou para: {vidaMaximaJogador} PV.");
+                    }
+                    else if (vitoriasTotais == 2 && nivel == 2)
+                    {
+                        nivel = 3; // Recompensa Nível 3: Ganha Preparação
+                        Console.WriteLine("\n RECOMPENSA DE NÍVEL DESTRANCADA! ");
+                        Console.WriteLine("Você subiu para o NÍVEL 3!");
+                        Console.WriteLine("Habilidade Desbloqueada: PREPARAÇÃO! (Dicas visuais a cada 2 rodadas)");
+                    }
+                    else if (vitoriasTotais == 3 && nivel == 3)
+                    {
+                        nivel = 4; // Recompensa Nível 4: Ganha Encontro de Intenções
+                        Console.WriteLine("\n RECOMPENSA DE NÍVEL DESTRANCADA! ");
+                        Console.WriteLine("Você subiu para o NÍVEL 4!");
+                        Console.WriteLine("Habilidade Desbloqueada: ENCONTRO DE INTENÇÕES! (Forçar empate após sofrer dano)");
+                        Console.WriteLine("Prepare-se... GIYGAS sentiu sua força e atacará agora!");
+                    }
+
+                    // Recompensa de Continuidade: Cura total antes do próximo combate
                     vidaJogador = vidaMaximaJogador;
 
-                    Console.WriteLine("\nPrepare-se para o próximo servo de Giygas...");
-                    Console.WriteLine("Pressione qualquer tecla para marchar adiante na jornada...");
+                    Console.WriteLine("\nPrepare-se para o próximo desafio da jornada...");
+                    Console.WriteLine("Pressione qualquer tecla para marchar adiante...");
                     Console.ReadKey();
                 }
             }
